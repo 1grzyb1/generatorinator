@@ -1,0 +1,44 @@
+version: "3.5"
+
+services:
+  db:
+    image: docker.io/library/postgres:12
+    restart: unless-stopped
+    container_name: db
+    ports:
+      - "5431:5432"
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-generator}"
+      POSTGRES_USER: "${POSTGRES_USER:-generator}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-generator}"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
+  generatorinator-frontend:
+    image: grzybek/generatorinator-frontend:latest
+    restart: unless-stopped
+    ports:
+      - "${GENERATORINATOR_FRONTEND_PORT:-9998}:5173"
+  generatorinator:
+    image: grzybek/generatorinator:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "${GENERATORINATOR_PORT:-9999}:8081"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/generator"
+      SPRING_DATASOURCE_USERNAME: "generator"
+      SPRING_DATASOURCE_PASSWORD: "generator"
+
+volumes:
+  postgres-storage:
+
+networks:
+  default:
