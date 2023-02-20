@@ -20,24 +20,28 @@ services:
           memory: 1G
         reservations:
           memory: 1G
-  generatorinator-frontend:
-    image: 1grzyb1/generatorinator-frontend:latest
-    restart: unless-stopped
-    network_mode: "host"
+
   generatorinator:
     image: 1grzyb1/generatorinator:latest
     restart: unless-stopped
     depends_on:
       - db
     ports:
-      - "${GENERATORINATOR_PORT:-9999}:8081"
+      - "9999:8081"
     environment:
       SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/generator"
       SPRING_DATASOURCE_USERNAME: "generator"
       SPRING_DATASOURCE_PASSWORD: "generator"
 
+  frontend:
+    image: 1grzyb1/generatorinator-frontend:latest
+    restart: unless-stopped
+    depends_on:
+      - generatorinator
+    ports:
+      - "5173:5173"
+    environment:
+      PUBLIC_BACKEND_URL: "http://grzybek.snet.ovh:9999"
+
 volumes:
   postgres-storage:
-
-networks:
-  default:
