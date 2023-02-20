@@ -5,6 +5,7 @@
   import Column from "./Column.svelte";
   import AddButton from "./AddButton.svelte";
   import {goto} from '$app/navigation';
+  import { env } from '$env/dynamic/public';
 
   let columns = [['']]
   let generatorName = ''
@@ -14,7 +15,7 @@
   }
 
   async function create() {
-    const res = await fetch('http://grzybek.snet.ovh:9999/generator', {
+    const res = await fetch(env.PUBLIC_BACKEND_URL + '/generator', {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
