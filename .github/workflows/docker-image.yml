@@ -18,8 +18,8 @@ jobs:
         username: 1grzyb1
         password: ${{ secrets.DOCKER_PASSWORD }}
     
-    - uses: docker/build-push-action@v4.0.0
     - name: Build and push Docker images
+      uses: docker/build-push-action@v4.0.0
       with:
         context: .
         push: true
