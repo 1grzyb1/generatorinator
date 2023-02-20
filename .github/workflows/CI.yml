@@ -23,9 +23,16 @@ jobs:
         username: 1grzyb1
         password: ${{ secrets.DOCKER_PASSWORD }}
     
-    - name: Build and push Docker images
+    - name: Build and push Docker for backend
       uses: docker/build-push-action@v4.0.0
       with:
         context: .
         push: true
         tags: 1grzyb1/generatorinator:latest
+    
+    - name: Build and push Docker for backend
+      uses: docker/build-push-action@v4.0.0
+      with:
+        context: ./frontend/generatorinator
+        push: true
+        tags: 1grzyb1/generatorinator-frontend:latest
