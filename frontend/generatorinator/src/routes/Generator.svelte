@@ -3,24 +3,33 @@
   import Input from "./Input.svelte";
   import Button from "./Button.svelte";
   import Column from "./Column.svelte";
-  import AddButton from "./AddButton.svelte";
   import {goto} from '$app/navigation';
   import { env } from '$env/dynamic/public';
 
   let columns = [['']]
   let generatorName = ''
 
-  function addColumn() {
-    columns = [...columns, ['']]
+  function columnChanged() {
+    let filteredColumns = removeEmptyRows(columns)
+    let withoutEmpty = filteredColumns.filter(column => column.length > 0)
+    withoutEmpty.map(column => column.push(''))
+    columns = [...withoutEmpty, ['']]
+  }
+
+  function removeEmptyRows(columns) {
+    return columns.map(column => column.filter(row => row !== ''))
   }
 
   async function create() {
+    let filteredColumns = removeEmptyRows(columns)
+    let withoutEmpty = filteredColumns.filter(column => column.length > 0)
+
     const res = await fetch(env.PUBLIC_BACKEND_URL + '/generator', {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         name: generatorName,
-        columns: columns.map(column => ({rows: column}))
+        columns: withoutEmpty.map(column => ({rows: column}))
       })
     })
     res.json().then(r => goto(`/generator/${r.id}`))
@@ -47,12 +56,9 @@
     <div class="flex mt-10 space-x-10 max-w-fit overflow-x-auto">
       {#each columns as column}
         <div class="min-w-fit">
-          <Column bind:rows="{column}"/>
+          <Column bind:rows="{column}" onChange="{columnChanged}"/>
         </div>
       {/each}
-      <div class="self-center">
-        <AddButton onClick="{addColumn}"/>
-      </div>
     </div>
   </Box>
 </div>
