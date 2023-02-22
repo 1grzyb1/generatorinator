@@ -25,9 +25,9 @@
 
 <div class="grid justify-items-center">
   <Box>
-    <div style="width: 120rem">
+    <div style="width: 60vw"></div>
       <div class="flex">
-        <div style="width: 30rem" class="mr-5">
+        <div class="flex-initial mr-10" style="width: 15vw">
           <Button text="Generate" onClick="{generate}"/>
         </div>
         <div class="flex-auto">
@@ -45,6 +45,5 @@
           </div>
         {/each}
       </div>
-    </div>
   </Box>
 </div>

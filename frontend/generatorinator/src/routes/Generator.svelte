@@ -29,16 +29,15 @@
 
 <div class="grid justify-items-center">
   <Box>
+    <div style="width: 60vw"></div>
     <div class="flex">
-      <div class="flex-initial" style="width: 30rem">
+      <div class="flex-initial" style="width: 20vw">
         <Input label="Generator name" bind:value={generatorName}/>
       </div>
-      <div class="flex-initial w-96">
 
-      </div>
       <div class="flex-auto">
         <div class="grid justify-items-end">
-          <div style="width: 30rem">
+          <div style="width: 20vw">
             <Button text="Create" onClick="{create}"/>
           </div>
         </div>
